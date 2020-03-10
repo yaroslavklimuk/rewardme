@@ -6,7 +6,7 @@ use App\User;
 use App\Models\{PendingReward, BonusReward, CashReward, UserPresent, RewardSetting};
 use App\Constants\RewardConstants as RConst;
 
-class RewardManagerDB
+class RewardManagerDB implements RewardManagerIface
 {
     public function acceptReward(int $pendRewardId, int $userId)
     {

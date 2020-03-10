@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->rememberToken();
+            $table->string('bank_acc')->default('d8f9g7df987g89fdg');
             $table->timestamps();
         });
     }

@@ -15,7 +15,7 @@ class RewardController extends Controller
 
     public function claimReward(Request $request, RewardFactoryIface $rewardFactory)
     {
-        $pendingReward = $rewardFactory->createReward();
+        $pendingReward = $rewardFactory->createReward($request->user()->id);
         return response()->json($pendingReward);
     }
 

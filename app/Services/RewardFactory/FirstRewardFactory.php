@@ -6,7 +6,7 @@ use App\User;
 use App\Models\{PendingReward, BonusReward, CashReward, UserPresent, RewardSetting, Present};
 use App\Constants\RewardConstants as RConst;
 
-class FirstRewardFactory
+class FirstRewardFactory implements RewardFactoryIface
 {
     const REWARDS_TYPES = [RConst::CASH_REWARD, RConst::BONUS_REWARD, RConst::PRESENT_REWARD];
 
@@ -33,8 +33,8 @@ class FirstRewardFactory
                 $reward = $this->createBonusReward();
         }
         $pendingReward = $this->createPendingReward($rewardType, $reward['id'], $userId);
-        $arrPendingReward['value'] = $rewardType === RConst::PRESENT_REWARD ? $reward['name'] : $reward['amount'];
-        return $arrPendingReward;
+        $pendingReward['value'] = $rewardType === RConst::PRESENT_REWARD ? $reward['name'] : $reward['amount'];
+        return $pendingReward;
     }
 
 
@@ -51,8 +51,8 @@ class FirstRewardFactory
         $cashLimitObj = RewardSetting::find(RConst::CASH_LIMIT);
         $cashLimit = isset($cashLimitObj) ? $cashLimitObj->val : 1000;
         $userCashRewards = CashReward::where('user_id', $userId)->pluck('amount');
-        $userPayedCash = array_sum($userCashRewards);
-        $leftToPay = $cashLimit->val - $userPayedCash;
+        $userPayedCash = array_sum($userCashRewards->toArray());
+        $leftToPay = $cashLimit - $userPayedCash;
         if($leftToPay <= 0){
             return false;
         }

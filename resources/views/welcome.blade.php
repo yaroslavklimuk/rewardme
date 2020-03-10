@@ -98,6 +98,10 @@
                     <p>Your reward is:</p>
                     <p id="rewardType"></p>
                     <p id="rewardAmount"><p>
+                    <div>
+                        <button id="acceptReward">Принять</button>
+                        <button id="rejectReward">Отклонить</button>
+                    </div>
                     <a href="#" rel="modal:close">Close</a>
                 </div>
             </div>
@@ -109,9 +113,31 @@
                 }
             });
 
+            var reward = null;
+
+            $("#acceptReward").click(function() {
+                $.post("/reward/accept", {reward_id: reward.id})
+                        .done(function (data) {
+                            reward = null;
+                            $("#rewardModal").hide();
+                            alert('Your reward was saved');
+                        });
+            });
+
+            $("#rejectReward").click(function() {
+                $.post("/reward/reject", {reward_id: reward.id})
+                        .done(function (data) {
+                            reward = null;
+                            $("#rewardModal").hide();
+                            alert('You have rejected this reward');
+                        });
+            });
+
             $("#big-red-button").click(function() {
                 $.post("/reward/claim", {})
                         .done(function (data) {
+                            reward = data;
+                            console.log('reward', reward);
                             $("#rewardType").html(data.type);
                             $("#rewardAmount").html(data.value);
                             $("#rewardModal").modal();
