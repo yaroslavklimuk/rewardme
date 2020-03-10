@@ -14,7 +14,9 @@ class CreateBonusRewardsTable extends Migration
     public function up()
     {
         Schema::create('bonus_rewards', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
+            $table->unsignedInteger('user_id')->nullable(true)->default(null);
+            $table->unsignedInteger('amount');
             $table->timestamps();
         });
     }

@@ -14,7 +14,8 @@ class CreatePresentsTable extends Migration
     public function up()
     {
         Schema::create('presents', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
+            $table->string('name');
             $table->timestamps();
         });
     }

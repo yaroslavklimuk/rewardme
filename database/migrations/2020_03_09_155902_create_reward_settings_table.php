@@ -14,8 +14,8 @@ class CreateRewardSettingsTable extends Migration
     public function up()
     {
         Schema::create('reward_settings', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->string('key');
+            $table->string('val');
         });
     }
 

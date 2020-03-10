@@ -14,7 +14,10 @@ class CreatePendingRewardsTable extends Migration
     public function up()
     {
         Schema::create('pending_rewards', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
+            $table->string('type', 100);
+            $table->unsignedInteger('reward_id');
+            $table->unsignedInteger('user_id');
             $table->timestamps();
         });
     }

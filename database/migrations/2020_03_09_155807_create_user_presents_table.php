@@ -14,7 +14,10 @@ class CreateUserPresentsTable extends Migration
     public function up()
     {
         Schema::create('user_presents', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
+            $table->unsignedInteger('user_id')->nullable(true)->default(null);
+            $table->string('name');
+            $table->boolean('sent')->default(false);
             $table->timestamps();
         });
     }
