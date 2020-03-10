@@ -13,4 +13,7 @@ class RewardConstants
 
     const CASH_LEFT = 'cash_left';
     const CASH_RIGHT = 'cash_right';
+
+    const BONUS_LEFT = 'bonus_left';
+    const BONUS_RIGHT = 'bonus_right';
 }

@@ -19,14 +19,16 @@ class RewardController extends Controller
         return response()->json($pendingReward);
     }
 
-    public function acceptReward(Request $request, int $pendRewardId, RewardManagerIface $rewardManager)
+    public function acceptReward(Request $request, RewardManagerIface $rewardManager)
     {
+        $pendRewardId = $request->input('reward_id');
         $rewardManager->acceptReward($pendRewardId, $request->user()->id);
         return response()->json(['success' => true]);
     }
 
-    public function rejectReward(Request $request, int $pendRewardId, RewardManagerIface $rewardManager)
+    public function rejectReward(Request $request, RewardManagerIface $rewardManager)
     {
+        $pendRewardId = $request->input('reward_id');
         $rewardManager->rejectReward($pendRewardId, $request->user()->id);
         return response()->json(['success' => true]);
     }

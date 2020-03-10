@@ -11,6 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('auth')->group(function(){
+    Route::get('/reward', function () {
+        return view('welcome');
+    });
+
+    Route::post('/reward/claim', 'RewardControler@claimReward');
+    Route::post('/reward/accept', 'RewardControler@acceptReward');
+    Route::post('/reward/reject', 'RewardControler@rejectReward');
 });
+
+Auth::routes();

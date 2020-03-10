@@ -4,7 +4,7 @@ namespace App\Services\RewardManager;
 
 use App\User;
 use App\Models\{PendingReward, BonusReward, CashReward, UserPresent, RewardSetting};
-use App\Constants\RewardConstants as Const;
+use App\Constants\RewardConstants as RConst;
 
 class RewardManagerDB
 {
@@ -12,13 +12,13 @@ class RewardManagerDB
     {
         $pendingReward = $this->getPendingReward($pendRewardId, $userId);
         switch($pendingReward->type){
-            case Const::BONUS_REWARD :
+            case RConst::BONUS_REWARD :
                 $this->acceptBonusReward($pendingReward->reward_id, $userId);
                 break;
-            case Const::CASH_REWARD :
+            case RConst::CASH_REWARD :
                 $this->acceptCashReward($pendingReward->reward_id, $userId);
                 break;
-            case Const::PRESENT_REWARD :
+            case RConst::PRESENT_REWARD :
                 $this->acceptPresentReward($pendingReward->reward_id, $userId);
                 break;
             default:
@@ -55,17 +55,18 @@ class RewardManagerDB
         // notify stuff about new present
     }
 
+
     public function rejectReward(int $pendRewardId, int $userId)
     {
         $pendingReward = $this->getPendingReward($pendRewardId, $userId);
         switch($pendingReward->type){
-            case Const::BONUS_REWARD :
+            case RConst::BONUS_REWARD :
                 $this->rejectBonusReward($pendingReward->reward_id);
                 break;
-            case Const::CASH_REWARD :
+            case RConst::CASH_REWARD :
                 $this->rejectCashReward($pendingReward->reward_id);
                 break;
-            case Const::PRESENT_REWARD :
+            case RConst::PRESENT_REWARD :
                 $this->rejectPresentReward($pendingReward->reward_id);
                 break;
             default:
@@ -90,7 +91,6 @@ class RewardManagerDB
         UserPresent::destroy($rewardId);
     }
 
-    
 
     protected function getPendingReward(int $pendRewardId, int $userId)
     {
