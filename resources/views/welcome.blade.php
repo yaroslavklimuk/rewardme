@@ -3,12 +3,16 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>Free Reward</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!-- jQuery Modal -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
         <!-- Styles -->
         <style>
             html, body {
@@ -90,7 +94,29 @@
                 <div class="title m-b-md">
                     <button id="big-red-button">ПРИЗ</button>
                 </div>
+                <div id="rewardModal" class="modal">
+                    <p>Your reward is:</p>
+                    <p id="rewardType"></p>
+                    <p id="rewardAmount"><p>
+                    <a href="#" rel="modal:close">Close</a>
+                </div>
             </div>
         </div>
+        <script>
+            $.ajaxSetup({
+                headers:{
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $("#big-red-button").click(function() {
+                $.post("/reward/claim", {})
+                        .done(function (data) {
+                            $("#rewardType").html(data.type);
+                            $("#rewardAmount").html(data.value);
+                            $("#rewardModal").modal();
+                        });
+            });
+        </script>
     </body>
 </html>

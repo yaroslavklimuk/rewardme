@@ -16,9 +16,9 @@ Route::middleware('auth')->group(function(){
         return view('welcome');
     });
 
-    Route::post('/reward/claim', 'RewardControler@claimReward');
-    Route::post('/reward/accept', 'RewardControler@acceptReward');
-    Route::post('/reward/reject', 'RewardControler@rejectReward');
+    Route::post('/reward/claim', 'RewardController@claimReward');
+    Route::post('/reward/accept', 'RewardController@acceptReward');
+    Route::post('/reward/reject', 'RewardController@rejectReward');
 });
 
 Auth::routes();
