@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->string('bank_acc')->default('d8f9g7df987g89fdg');
+            $table->unsignedInteger('bonuses')->nullable(true);
             $table->timestamps();
         });
     }
