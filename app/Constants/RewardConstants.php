@@ -16,4 +16,6 @@ class RewardConstants
 
     const BONUS_LEFT = 'bonus_left';
     const BONUS_RIGHT = 'bonus_right';
+
+    const CASH_TO_BONUS_COEFF = 1.2;
 }
