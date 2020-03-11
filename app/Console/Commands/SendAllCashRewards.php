@@ -47,6 +47,7 @@ class SendAllCashRewards extends Command
         $rewardsCount = $rewards->count();
         for($i=0; $i<$rewardsCount; $i++){
             $reward = $rewards->pop();
+            file_put_contents(storage_path('COMM'), $reward->user_id . PHP_EOL, FILE_APPEND);
             $user = User::find($reward->user_id);
             $result = $this->banking->sendMoney('defaultAcc', $user->bank_acc, $reward->amount);
             if($result === true){
