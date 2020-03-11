@@ -22,7 +22,7 @@ class FirstRewardFactory implements RewardFactoryIface
         }
 
         $rewardType = array_rand($rewardsJar);
-        switch($rewardType){
+        switch($rewardsJar[$rewardType]){
             case RConst::PRESENT_REWARD:
                 $reward = $this->createPresentReward();
                 break;
@@ -32,14 +32,18 @@ class FirstRewardFactory implements RewardFactoryIface
             default:
                 $reward = $this->createBonusReward();
         }
-        $pendingReward = $this->createPendingReward($rewardType, $reward['id'], $userId);
-        $pendingReward['value'] = $rewardType === RConst::PRESENT_REWARD ? $reward['name'] : $reward['amount'];
+        $pendingReward = $this->createPendingReward($rewardsJar[$rewardType], $reward['id'], $userId);
+        $pendingReward['value'] = $rewardsJar[$rewardType] === RConst::PRESENT_REWARD ? $reward['name'] : $reward['amount'];
         return $pendingReward;
     }
 
 
     private function canAddPresentReward(int $userId)
     {
+        $presentsCount = Present::count();
+        if($presentsCount === 0){
+            return false;
+        }
         $presentsLimitObj = RewardSetting::find(RConst::PRESENTS_LIMIT);
         $presentsLimit = isset($presentsLimitObj) ? $presentsLimitObj->val : 3;
         $presentsCount = UserPresent::where('user_id', $userId)->count();
@@ -104,8 +108,9 @@ class FirstRewardFactory implements RewardFactoryIface
 
     private function createPresentReward()
     {
-        $presents = Present::pluck('name');
-        $presentName = array_rand($presents, 1);
+        $presentsObj = Present::pluck('name');
+        $presents = $presentsObj->toArray();
+        $presentName = $presents[array_rand($presents)];
 
         $reward = new UserPresent();
         $reward->name = $presentName;
