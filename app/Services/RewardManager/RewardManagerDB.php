@@ -24,6 +24,7 @@ class RewardManagerDB implements RewardManagerIface
             default:
                 throw new \Exception('Bad reward type!');
         }
+        $this->deletePendingReward($pendRewardId);
     }
 
     protected function acceptBonusReward(int $rewardId, int $userId)
@@ -73,7 +74,7 @@ class RewardManagerDB implements RewardManagerIface
                 PendingReward::destroy($pendRewardId);
                 throw new \Exception('Bad reward type!');
         }
-        PendingReward::destroy($pendRewardId);
+        $this->deletePendingReward($pendRewardId);
     }
 
     protected function rejectBonusReward(int $rewardId)
@@ -99,5 +100,30 @@ class RewardManagerDB implements RewardManagerIface
             throw new \Exception('Wrong reward id!');
         }
         return $pendingReward;
+    }
+
+    protected function deletePendingReward(int $pendRewardId)
+    {
+        PendingReward::destroy($pendRewardId);
+    }
+
+
+    public function convertCashIntoBonus(int $rewardId, float $coeff = null)
+    {
+        $coeff = $coeff ?? RConst::CASH_TO_BONUS_COEFF;
+        $cashReward = CashReward::where('id', $rewardId)->where('payed', false)->firstOrFail();
+
+        $bonus = new BonusReward();
+        $bonus->user_id = $cashReward->user_id;
+        $bonus->amount = $cashReward->amount * $coeff;
+        $bonus->save();
+
+        $cashReward->delete();
+
+        $user = User::find($bonus->user_id);
+        $user->bonuses = ceil($user->bonuses + $bonus->amount);
+        $user->save();
+
+        return $bonus->toArray();
     }
 }
